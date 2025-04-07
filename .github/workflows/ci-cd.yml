@@ -3,10 +3,10 @@ name: Android CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Срабатывает при push на ветку main
+      - main
   pull_request:
     branches:
-      - main  # Срабатывает при pull request в ветку main
+      - main
 
 jobs:
   test:
@@ -18,11 +18,14 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'      # <--- ВАЖНО: добавлено!
+          distribution: 'temurin'
           java-version: '11'
 
       - name: Set up Gradle
         uses: gradle/wrapper-validation-action@v1
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
       - name: Run tests
         run: ./gradlew test
@@ -37,11 +40,14 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'      # <--- тоже добавлено!
+          distribution: 'temurin'
           java-version: '11'
 
       - name: Set up Gradle
         uses: gradle/wrapper-validation-action@v1
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
       - name: Build the project
         run: ./gradlew build
