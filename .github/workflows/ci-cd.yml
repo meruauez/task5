@@ -1,0 +1,45 @@
+name: Android CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Срабатывает при push на ветку main
+  pull_request:
+    branches:
+      - main  # Срабатывает при pull request в ветку main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Используется последняя версия Ubuntu для выполнения
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Клонируем репозиторий на машину
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Укажите версию JDK, используемую в вашем проекте
+
+      - name: Set up Gradle
+        uses: gradle/wrapper-validation-action@v1  # Используем Gradle Wrapper для проверки
+
+      - name: Run tests
+        run: ./gradlew test  # Запуск тестов Android проекта с помощью Gradle
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test  # Сборка будет выполняться только если тесты пройдены
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Клонируем репозиторий на машину
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Укажите версию JDK, используемую в вашем проекте
+
+      - name: Set up Gradle
+        uses: gradle/wrapper-validation-action@v1  # Используем Gradle Wrapper для проверки
+
+      - name: Build the project
+        run: ./gradlew build  # Сборка Android проекта с помощью Gradle
